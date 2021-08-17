@@ -12,7 +12,9 @@ import { _CREATE, _EDIT, _VIEW } from '@/config/query-params';
 import { DEFAULT_WORKSPACE } from '@/models/provisioning.cattle.io.cluster';
 
 import { findBy, removeObject, clear } from '@/utils/array';
-import { clone, diff, isEmpty, set } from '@/utils/object';
+import {
+  clone, diff, isEmpty, set, get
+} from '@/utils/object';
 import { allHash } from '@/utils/promise';
 import { sortBy } from '@/utils/sort';
 import { camelToTitle, nlToBr } from '@/utils/string';
@@ -56,6 +58,8 @@ import { SETTING } from '~/config/settings';
 const PUBLIC = 'public';
 const PRIVATE = 'private';
 const ADVANCED = 'advanced';
+
+const HARVESTER = 'harvester';
 
 export default {
   components: {
@@ -428,6 +432,10 @@ export default {
       const preferred = this.$store.getters['plugins/cloudProviderForDriver'](this.provider);
 
       for ( const opt of this.agentArgs['cloud-provider-name'].options ) {
+        if (opt === HARVESTER && this.provider !== opt) {
+          continue;
+        }
+
         if ( !preferred || opt === preferred || opt === 'external' ) {
           out.push({
             label: this.$store.getters['i18n/withFallback'](`cluster.cloudProvider."${ opt }".label`, null, opt),
@@ -613,6 +621,7 @@ export default {
       case 'none': return false;
       case 'aws': return false;
       case 'rancher-vsphere': return false;
+      case HARVESTER: return false;
       default: return true;
       }
     },
@@ -914,10 +923,33 @@ export default {
         }
       }
 
+      if (!this.value.metadata.name && this.agentConfig['cloud-provider-name'] === HARVESTER) {
+        this.errors.push(this.t('validation.required', { key: this.t('cluster.name.label') }, true));
+      }
+
       if (this.errors.length) {
         btnCb(false);
 
         return;
+      }
+
+      if (this.agentConfig['cloud-provider-name'] === HARVESTER) {
+        const clusterId = get(this.credential, 'harvestercredentialConfig.clusterId') || '';
+        const serverUrl = (this.$store.getters['management/byId'](MANAGEMENT.SETTING, 'server-url') || {}).value;
+
+        const namespace = this.machinePools?.[0]?.config?.vmNamespace;
+        const res = await this.$store.dispatch('management/request', {
+          url:                  `/k8s/clusters/${ clusterId }/v1/harvester/kubeconfig`,
+          method:               'POST',
+          data:                 {
+            serverUrl:          `${ serverUrl }/k8s/clusters/${ clusterId }:6443`,
+            clusterRoleName:    'harvesterhci.io:cloudprovider',
+            namespace,
+            serviceAccountName: this.value.metadata.name,
+          },
+        });
+
+        set(this.agentConfig, 'cloud-provider-config', res.data);
       }
 
       await this.save(btnCb);
