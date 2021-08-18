@@ -7,6 +7,8 @@ import RadioGroup from '@/components/form/RadioGroup';
 import { get, set } from '@/utils/object';
 import { MANAGEMENT, VIRTUAL_PROVIDER } from '@/config/types';
 
+const IMPORTED = 'imported';
+
 export default {
   components: {
     LabeledInput, LabeledSelect, RadioGroup
@@ -21,7 +23,7 @@ export default {
     this.$emit('validationChanged', true);
 
     if (!this.value.decodedData.clusterType) {
-      this.value.setData('clusterType', 'import');
+      this.value.setData('clusterType', IMPORTED);
     }
 
     const cluster = get(this.value, 'harvestercredentialConfig.clusterId') || '';
@@ -29,6 +31,7 @@ export default {
     return {
       clusters: [],
       cluster,
+      IMPORTED,
     };
   },
 
@@ -43,7 +46,7 @@ export default {
     },
 
     isImportCluster() {
-      return this.value.decodedData.clusterType === 'import';
+      return this.value.decodedData.clusterType === IMPORTED;
     }
   },
 
@@ -112,7 +115,7 @@ export default {
         :disabled="isEdit"
         name="clusterType"
         :labels="[t('cluster.credential.harvester.import'),t('cluster.credential.harvester.external')]"
-        :options="['import', 'external']"
+        :options="[IMPORTED, 'external']"
         @input="value.setData('clusterType', $event);"
       />
     </div>
@@ -125,7 +128,7 @@ export default {
           :disabled="isEdit"
           :options="clusterOptions"
           :required="true"
-          label="Cluster"
+          :label="t('cluster.credential.harvester.cluster')"
         />
       </div>
 

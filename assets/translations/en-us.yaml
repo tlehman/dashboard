@@ -1019,6 +1019,7 @@ cluster:
       kubeconfigContent:
         label: KubeconfigContent
       placeholder: 'Namespace/Name'
+      cluster: Cluster
   description:
     label: Cluster Description
     placeholder: Any text you want that better describes this cluster

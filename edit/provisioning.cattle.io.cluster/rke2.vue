@@ -934,7 +934,7 @@ export default {
       }
 
       if (this.agentConfig['cloud-provider-name'] === HARVESTER) {
-        const clusterId = get(this.credential, 'harvestercredentialConfig.clusterId') || '';
+        const clusterId = get(this.credential, 'decodedData.clusterId') || '';
         const serverUrl = (this.$store.getters['management/byId'](MANAGEMENT.SETTING, 'server-url') || {}).value;
 
         const namespace = this.machinePools?.[0]?.config?.vmNamespace;
