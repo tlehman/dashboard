@@ -935,14 +935,15 @@ export default {
 
       if (this.agentConfig['cloud-provider-name'] === HARVESTER) {
         const clusterId = get(this.credential, 'decodedData.clusterId') || '';
-        const serverUrl = (this.$store.getters['management/byId'](MANAGEMENT.SETTING, 'server-url') || {}).value;
-
+        const setting = await this.$store.dispatch('cluster/request', { url: `/k8s/clusters/${ clusterId }/v1/${ MANAGEMENT.SETTING }s/server-url` });
+        const serverUrl = (setting?.value || '').replace(/:[0-9]+/, '');
         const namespace = this.machinePools?.[0]?.config?.vmNamespace;
+
         const res = await this.$store.dispatch('management/request', {
           url:                  `/k8s/clusters/${ clusterId }/v1/harvester/kubeconfig`,
           method:               'POST',
           data:                 {
-            serverUrl:          `${ serverUrl }/k8s/clusters/${ clusterId }:6443`,
+            serverUrl:          `${ serverUrl }:6443`,
             clusterRoleName:    'harvesterhci.io:cloudprovider',
             namespace,
             serviceAccountName: this.value.metadata.name,
