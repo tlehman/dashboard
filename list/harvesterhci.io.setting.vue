@@ -52,8 +52,7 @@ export default {
     if (isSingleVirtualCluster) {
       SETTINGS = {
         ...HCI_ALLOWED_SETTINGS,
-        [SETTING.SERVER_URL]:                     ALLOWED_SETTINGS.SERVER_URL,
-        [SETTING.UI_DASHBOARD_INDEX]:             ALLOWED_SETTINGS.UI_DASHBOARD_INDEX,
+        [SETTING.UI_DASHBOARD_INDEX]: ALLOWED_SETTINGS.UI_DASHBOARD_INDEX,
       };
     }
 
