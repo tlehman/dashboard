@@ -4718,6 +4718,9 @@ tableHeaders:
   fingerprint: Fingerprint
   networkType: Type
   networkVlan: Vlan ID
+  networkSriovNumVfs: Number of VFs
+  networkSriovMTU: MTU
+  networkSriovNodeSelector: Node selector
   readyToUse: Ready To Use
   backupTarget: Backup Target
   targetVm: Target VM

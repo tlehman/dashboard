@@ -39,6 +39,7 @@ export default {
     return {
       config,
       type:          'L2VlanNetwork',
+      options:       ['L2VlanNetwork', 'sriov'],
       layer3Network: {
         mode:         layer3Network.mode || AUTO,
         serverIPAddr: layer3Network.serverIPAddr || '',
@@ -129,13 +130,17 @@ export default {
 
     <Tabbed v-bind="$attrs" class="mt-15" :side-tabs="true">
       <Tab name="basics" :label="t('harvester.network.tabs.basics')" :weight="99" class="bordered-table">
-        <LabeledInput
-          v-model="type"
-          class="mb-20"
-          :label="t('harvester.fields.type')"
-          :disabled="true"
-          required
-        />
+        <div class="labeled-input">
+          <label for="type">Type</label>
+          <select v-model="type" name="type">
+            <option selected>
+              L2VlanNetwork
+            </option>
+            <option>
+              sriov
+            </option>
+          </select>
+        </div>
 
         <LabeledInput
           v-model.number="config.vlan"
@@ -202,6 +207,96 @@ export default {
               :mode="mode"
               required
             />
+          </div>
+        </div>
+      </Tab>
+      <Tab
+        name="SR-IOV Node Policy"
+        class="bordered-table"
+        :weight="97"
+      >
+        <LabeledInput
+          v-model.number="config.sriovNumvfs"
+          v-int-number
+          class="mb-20"
+          required
+          type="number"
+          placeholder="e.g. 1-7"
+          :label="t('tableHeaders.networkSriovNumVfs')"
+          :mode="mode"
+          @input="input"
+        />
+        <LabeledInput
+          v-model.number="config.sriovMtu"
+          v-int-number
+          class="mb-20"
+          required
+          type="number"
+          placeholder="e.g. 1500"
+          :label="t('tableHeaders.networkSriovMTU')"
+          :mode="mode"
+          @input="input"
+        />
+        <LabeledInput
+          v-model="config.sriovNodeSelector"
+          class="mb-20"
+          required
+          type="number"
+          :label="t('tableHeaders.networkSriovNodeSelector')"
+          :disabled="true"
+
+          :placeholder="'feature.node.kubernetes.io/network-sriov.capable: true'"
+          :v-text="'feature.node.kubernetes.io/network-sriov.capable: true'"
+          @input="input"
+        />
+
+        <div class="labeled-input">
+          <span>NIC Selector</span>
+
+          <div id="nicSelector" class="labeled-input">
+            <label for="vendor">Vendor</label>
+            <select v-model="config.sriovVendor" name="vendor">
+              <option selected>
+                8086
+              </option>
+              <option>
+                15b3
+              </option>
+            </select>
+            <label for="vendor">DeviceID</label>
+            <select name="deviceId">
+              <option>0d58</option>
+              <option>1572</option>
+              <option>158b</option>
+              <option>1013</option>
+              <option>1015</option>
+              <option>1017</option>
+              <option>101b</option>
+            </select>
+            <label for="deviceType">Device Type</label>
+            <select name="deviceType">
+              <option selected>
+                netdevice
+              </option>
+              <option>
+                vfio-pci
+              </option>
+            </select>
+            <label for="deviceType">Link Type</label>
+            <select name="linkType">
+              <option selected>
+                eth
+              </option>
+              <option>
+                ETH
+              </option>
+              <option>
+                ib
+              </option>
+              <option>
+                IB
+              </option>
+            </select>
           </div>
         </div>
       </Tab>
