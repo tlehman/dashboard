@@ -115,7 +115,8 @@ export const HCI_SETTING = {
   SUPPORT_BUNDLE_NAMESPACES:        'support-bundle-namespaces',
   AUTO_DISK_PROVISION_PATHS:        'auto-disk-provision-paths',
   RANCHER_MONITORING:               'fleet-local/rancher-monitoring',
-  RELEASE_DOWNLOAD_URL:             'release-download-url'
+  RELEASE_DOWNLOAD_URL:             'release-download-url',
+  SRIOV_NETWORKING_ENABLED:         'sriov-networking-enabled'
 };
 
 export const HCI_ALLOWED_SETTINGS = {
@@ -150,7 +151,8 @@ export const HCI_ALLOWED_SETTINGS = {
   [HCI_SETTING.RANCHER_MONITORING]:                {
     kind: 'custom', from: 'import', canReset: true, customFormatter: 'json', alias: 'harvester-monitoring'
   },
-  [HCI_SETTING.RELEASE_DOWNLOAD_URL]: { kind: 'url' },
+  [HCI_SETTING.RELEASE_DOWNLOAD_URL]:     { kind: 'url' },
+  [HCI_SETTING.SRIOV_NETWORKING_ENABLED]: { kind: 'boolean' },
 };
 
 export const HCI_SINGLE_CLUSTER_ALLOWED_SETTING = {
