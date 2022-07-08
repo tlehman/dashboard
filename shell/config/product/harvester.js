@@ -1,5 +1,5 @@
 import {
-  HCI, NODE, CONFIG_MAP, NAMESPACE, VIRTUAL_TYPES, MANAGEMENT, PVC, NETWORK_ATTACHMENT
+  HCI, NODE, CONFIG_MAP, NAMESPACE, VIRTUAL_TYPES, MANAGEMENT, PVC, NETWORK_ATTACHMENT, SRIOV_NETWORK,
 } from '@shell/config/types';
 import {
   STATE, NAME_UNLINKED, NAME as NAME_COL, AGE, NAMESPACE as NAMESPACE_COL,
@@ -186,7 +186,8 @@ export function init(store) {
     HCI.BACKUP,
     HCI.SSH,
     HCI.CLOUD_TEMPLATE,
-    HCI.SETTING
+    HCI.SETTING,
+    HCI.SRIOV_NETWORK,
   ], 'advanced');
 
   configureType(HCI.CLUSTER_NETWORK, { realResource: HCI.SETTING, showState: false });
@@ -248,6 +249,29 @@ export function init(store) {
     route:      {
       name:     'c-cluster-product-resource',
       params:   { resource: HCI.NETWORK_ATTACHMENT }
+    },
+    exact: false,
+  });
+
+  configureType(SRIOV_NETWORK, { isEditable: false, showState: false });
+  configureType(HCI.SRIOV_NETWORK, {
+    location:    {
+      name:    'c-cluster-product-resource',
+      params:  { resource: HCI.SRIOV_NETWORK },
+    },
+    resource:       SRIOV_NETWORK,
+    resourceDetail: HCI.SRIOV_NETWORK,
+    resourceEdit:   HCI.SRIOV_NETWORK,
+  });
+
+  virtualType({
+    labelKey:     'harvester.sriov.label',
+    name:         HCI.SRIOV_NETWORK,
+    namespaced:   true,
+    weight:       190,
+    route:        {
+      name:      'c-cluster-product-resource',
+      params:    { resource: HCI.SRIOV_NETWORK }
     },
     exact: false,
   });
