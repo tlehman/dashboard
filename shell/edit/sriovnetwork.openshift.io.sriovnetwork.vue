@@ -10,7 +10,12 @@ export default {
   },
 
   data() {
-    return {};
+    const config = JSON.parse(this.value?.spec?.config || '{}');
+
+    return {
+      config,
+      type: 'SriovNetwork',
+    };
   },
 
   created() {

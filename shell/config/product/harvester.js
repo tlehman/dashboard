@@ -1,5 +1,5 @@
 import {
-  HCI, NODE, CONFIG_MAP, NAMESPACE, VIRTUAL_TYPES, MANAGEMENT, PVC, NETWORK_ATTACHMENT, SRIOV_NETWORK,
+  HCI, NODE, CONFIG_MAP, NAMESPACE, VIRTUAL_TYPES, MANAGEMENT, PVC, NETWORK_ATTACHMENT,
 } from '@shell/config/types';
 import {
   STATE, NAME_UNLINKED, NAME as NAME_COL, AGE, NAMESPACE as NAMESPACE_COL,
@@ -253,13 +253,13 @@ export function init(store) {
     exact: false,
   });
 
-  configureType(SRIOV_NETWORK, { isEditable: false, showState: false });
+  configureType(HCI.SRIOV_NETWORK, { isEditable: false, showState: false });
   configureType(HCI.SRIOV_NETWORK, {
     location:    {
       name:    'c-cluster-product-resource',
       params:  { resource: HCI.SRIOV_NETWORK },
     },
-    resource:       SRIOV_NETWORK,
+    resource:       HCI.SRIOV_NETWORK,
     resourceDetail: HCI.SRIOV_NETWORK,
     resourceEdit:   HCI.SRIOV_NETWORK,
   });
