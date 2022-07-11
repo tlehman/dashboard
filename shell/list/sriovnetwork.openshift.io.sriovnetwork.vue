@@ -13,21 +13,21 @@ const schema = {
   metadata: { name: HCI.SRIOV_NETWORK }
 };
 
+const sleep = (milliseconds) => {
+  return new Promise(resolve => setTimeout(resolve, milliseconds));
+};
+
 export default {
   name:       'HarvesterListSriovNetworks',
   components: {},
 
-  fetch() {
+  async fetch() {
+    await sleep(1);
     this.sriovNetworks = [];
   },
 
   data() {
-    return {
-      hash:                  {},
-      rows:                  [],
-      hosts:                 [],
-      sriovNetworks:          [],
-    };
+    return {};
   },
 
   computed: {
