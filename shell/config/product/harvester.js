@@ -253,6 +253,7 @@ export function init(store) {
     exact: false,
   });
 
+  // TODO only show SRIOV if the sriov-networking-enabled setting is set to 'true'
   configureType(HCI.SRIOV_NETWORK, { isEditable: false, showState: false });
   configureType(HCI.SRIOV_NETWORK, {
     location:    {
